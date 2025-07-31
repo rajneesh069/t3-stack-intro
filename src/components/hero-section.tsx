@@ -1,12 +1,22 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { Card, CardHeader } from "./ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import { heroSectionCards } from "@/lib/constants";
+import { Badge } from "./ui/badge";
+import { CheckCircle, Circle, PlusIcon } from "lucide-react";
+import { Input } from "./ui/input";
 
 export function HeroSection() {
   return (
     <section className="container mx-auto my-auto">
       <div className="grid items-center gap-12 lg:grid-cols-2">
-        <div className="flex flex-col gap-2">
+        <div className="space-y-8">
           <h1 className="text-5xl font-bold">
             Get Things Done{" "}
             <span className="text-muted-foreground">Effortlessly</span>
@@ -31,7 +41,34 @@ export function HeroSection() {
           </div>
         </div>
         <Card>
-          <CardHeader>Hello</CardHeader>
+          <CardHeader>
+            <div className="flex justify-between px-2">
+              <CardTitle>{"Today's Tasks"}</CardTitle>
+              <Badge variant={"secondary"}>
+                {heroSectionCards.length} Tasks
+              </Badge>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {heroSectionCards.map((el, idx) => (
+              <div key={idx} className="flex gap-3">
+                {el.done ? (
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                ) : (
+                  <Circle />
+                )}
+                <p>{el.title}</p>
+              </div>
+            ))}
+          </CardContent>
+
+          <CardFooter className="space-x-3">
+            <PlusIcon className="text-muted-foreground h-5 w-5" />
+            <Input
+              placeholder="Add a new task...."
+              className="w-sm border-0 bg-transparent"
+            />
+          </CardFooter>
         </Card>
       </div>
     </section>
