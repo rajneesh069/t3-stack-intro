@@ -20,13 +20,6 @@ export async function Navbar() {
                 <p>{session ? "Sign out" : "Sign in"}</p>
               </Button>
             </Link>
-            {!session && (
-              <Link href={"/hello"}>
-                <Button variant={"outline"}>
-                  <p>{"Get Started"}</p>
-                </Button>
-              </Link>
-            )}
           </div>
         </div>
       </div>

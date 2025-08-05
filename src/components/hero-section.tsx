@@ -14,9 +14,9 @@ import { Input } from "./ui/input";
 
 export function HeroSection() {
   return (
-    <section className="container mx-auto my-auto">
-      <div className="grid items-center gap-12 lg:grid-cols-2">
-        <div className="space-y-8">
+    <section className="container mx-auto my-auto lg:p-20">
+      <div className="flex flex-col gap-20 lg:flex-row">
+        <div className="flex flex-col justify-center space-y-8 text-center">
           <h1 className="text-5xl font-bold">
             Get Things Done{" "}
             <span className="text-muted-foreground">Effortlessly</span>
@@ -27,7 +27,7 @@ export function HeroSection() {
             insights.
           </p>
 
-          <div className="flex gap-2">
+          <div className="flex justify-center gap-2">
             <Link href={"/hello"}>
               <Button variant={"default"} size={"lg"}>
                 Get Started
@@ -51,7 +51,10 @@ export function HeroSection() {
           </CardHeader>
           <CardContent className="space-y-3">
             {heroSectionCards.map((el, idx) => (
-              <div key={idx} className="flex gap-3">
+              <div
+                key={idx}
+                className="hover:bg-muted flex gap-3 rounded-lg p-3"
+              >
                 {el.done ? (
                   <CheckCircle className="h-5 w-5 text-green-500" />
                 ) : (
