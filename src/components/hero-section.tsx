@@ -14,7 +14,7 @@ import { Input } from "./ui/input";
 
 export function HeroSection() {
   return (
-    <section className="container mx-auto my-auto lg:p-20">
+    <section className="container mx-auto my-auto px-4 lg:p-20">
       <div className="flex flex-col gap-20 lg:flex-row">
         <div className="flex flex-col justify-center space-y-8 text-center">
           <h1 className="text-5xl font-bold">

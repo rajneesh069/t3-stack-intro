@@ -1,5 +1,4 @@
 import { auth } from "@/server/auth";
-import Image from "next/image";
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
 import { Button } from "./ui/button";

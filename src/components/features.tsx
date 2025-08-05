@@ -1,5 +1,6 @@
 import { Bell, Calendar, CheckCircle, Shield } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Badge } from "./ui/badge";
 
 const features = [
   {
@@ -29,6 +30,9 @@ export function Features() {
   return (
     <section className="bg-muted/50 px-4 py-20">
       <div className="container mx-auto space-y-3">
+        <div className="flex justify-center">
+          <Badge variant={"secondary"}>Features</Badge>
+        </div>
         <h2 className="text-center text-3xl font-semibold">
           Everything you need to stay organized
         </h2>
