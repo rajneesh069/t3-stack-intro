@@ -16,7 +16,7 @@ export async function Navbar() {
           <div className="flex gap-2">
             <Link href={session ? "/api/auth/signout" : "/api/auth/signin"}>
               <Button variant={"outline"}>
-                <p>{session ? "Sign out" : "Sign in"}</p>
+                <p>{session?.user.id ? "Sign out" : "Sign in"}</p>
               </Button>
             </Link>
           </div>
