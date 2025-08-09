@@ -30,7 +30,7 @@ export default async function RootLayout({
       className={`${inter.className} ${isDark ? "dark" : ""}`}
       style={{ colorScheme: isDark ? "dark" : "light" }}
     >
-      <body>
+      <body className="flex min-h-screen flex-col">
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -39,7 +39,7 @@ export default async function RootLayout({
         >
           <TRPCReactProvider>
             <Navbar />
-            {children}
+            <main className="flex-1">{children}</main>
           </TRPCReactProvider>
         </ThemeProvider>
       </body>

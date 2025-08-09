@@ -44,7 +44,6 @@ export const authConfig = {
   adapter: PrismaAdapter(db),
   callbacks: {
     session: ({ session, user }) => {
-      console.log("SESSION RUNNING\n\n\n");
       return {
         ...session,
         user: {
@@ -52,6 +51,10 @@ export const authConfig = {
           id: user.id,
         },
       };
+    },
+
+    redirect: ({ baseUrl }) => {
+      return `${baseUrl}/todos`;
     },
   },
 } satisfies NextAuthConfig;
