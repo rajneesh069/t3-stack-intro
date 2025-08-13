@@ -42,6 +42,12 @@ model Session {
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum Priority {
+    URGENT
+    TODAY
+    TOMORROW
+}
+
 model User {
     id            String    @id @default(cuid())
     name          String?
@@ -70,6 +76,7 @@ model Todo {
     description String?
     done        Boolean  @default(false)
     userId      String
+    priority    Priority @default(URGENT)
     createdAt   DateTime @default(now())
     updatedAt   DateTime @default(now()) @updatedAt
     user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)

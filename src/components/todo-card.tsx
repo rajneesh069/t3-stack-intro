@@ -13,7 +13,7 @@ export function TodoCard({
   done,
 }: {
   title: string;
-  description: string;
+  description: string | null;
   done: boolean;
 }) {
   return (
@@ -22,9 +22,11 @@ export function TodoCard({
         <CardTitle className={`${done ? "line-through" : ""}`}>
           {title}
         </CardTitle>
-        <CardDescription className={`${done ? "line-through" : ""}`}>
-          {description}
-        </CardDescription>
+        {description && (
+          <CardDescription className={`${done ? "line-through" : ""}`}>
+            {description}
+          </CardDescription>
+        )}
       </CardHeader>
       <CardFooter className="flex justify-end">
         <Button variant={"destructive"}>Delete</Button>

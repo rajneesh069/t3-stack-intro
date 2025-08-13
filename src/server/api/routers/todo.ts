@@ -3,6 +3,14 @@ import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 
 export const todoRouter = createTRPCRouter({
+  getAllTodos: protectedProcedure.query(async ({ ctx }) => {
+    const allTodos = await ctx.db.todo.findMany({
+      where: {
+        userId: ctx.session.user.id,
+      },
+    });
+    return allTodos;
+  }),
   addTodo: protectedProcedure
     .input(
       z.object({
@@ -19,11 +27,12 @@ export const todoRouter = createTRPCRouter({
     }),
 
   getTodo: protectedProcedure
-    .input(z.object({ userId: z.string().uuid() }))
+    .input(z.object({ todoId: z.string().uuid() }))
     .query(async ({ input, ctx }) => {
       return await ctx.db.todo.findMany({
         where: {
-          userId: input.userId,
+          id: input.todoId,
+          userId: ctx.session.user.id,
         },
       });
     }),

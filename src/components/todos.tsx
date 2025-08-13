@@ -1,9 +1,10 @@
 import { MicIcon } from "lucide-react";
 import { TodoCard } from "./todo-card";
 import { Input } from "./ui/input";
+import { api } from "@/trpc/server";
 
 // Mock data for each section — 4 todos each
-const todayTodos = [
+const urgentTodos = [
   {
     id: "uuid-today-1",
     title: "Fix bug in login flow",
@@ -93,7 +94,11 @@ const tomorrowTodos = [
   },
 ];
 
-export function Todos() {
+export async function Todos() {
+  const todos = await api.todo.getAllTodos();
+  const urgentTodos = todos.filter((todo) => todo.priority === "URGENT");
+  const laterTodayTodos = todos.filter((todo) => todo.priority === "TODAY");
+  const tomorrowTodos = todos.filter((todo) => todo.priority === "URGENT");
   return (
     <div className="flex h-full w-full flex-col-reverse gap-2 p-2 lg:h-[calc(100vh-64px)] lg:flex-col">
       <div className="flex h-full w-full flex-grow flex-col border-b px-2 lg:flex-row">
@@ -101,10 +106,8 @@ export function Todos() {
           id="important-todos"
           className="h-full w-full flex-shrink-0 space-y-4 border-b p-3 lg:w-1/3 lg:border-r lg:border-b-0"
         >
-          <h1 className="text-center text-4xl font-bold underline">
-            Important
-          </h1>
-          {todayTodos.map((todo) => (
+          <h1 className="text-center text-4xl font-bold underline">Urgent</h1>
+          {urgentTodos.map((todo) => (
             <TodoCard
               key={todo.id}
               title={todo.title}

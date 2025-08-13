@@ -52,9 +52,5 @@ export const authConfig = {
         },
       };
     },
-
-    redirect: ({ baseUrl }) => {
-      return `${baseUrl}/todos`;
-    },
   },
 } satisfies NextAuthConfig;
