@@ -28,8 +28,11 @@ export const updateTodoSchema = z.object({
   id: z.string().uuid(),
   userId: z.string().cuid(),
   title: z.string(),
-  description: z.string().optional(),
+  description: z.string().nullable(),
   done: z.boolean(),
+  priority: z.enum(["URGENT", "TODAY", "TOMORROW"], {
+    required_error: "Please select a priority.",
+  }),
 });
 
 export type AddTodoSchema = z.infer<typeof addTodoSchema>;

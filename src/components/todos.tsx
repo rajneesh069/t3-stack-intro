@@ -23,6 +23,7 @@ export async function Todos() {
               title={todo.title}
               description={todo.description}
               done={todo.done}
+              priority={todo.priority}
             />
           ))}
         </section>
@@ -41,6 +42,7 @@ export async function Todos() {
               title={todo.title}
               description={todo.description}
               done={todo.done}
+              priority={todo.priority}
             />
           ))}
         </section>
@@ -57,6 +59,7 @@ export async function Todos() {
               title={todo.title}
               description={todo.description}
               done={todo.done}
+              priority={todo.priority}
             />
           ))}
         </section>

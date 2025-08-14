@@ -1,23 +1,7 @@
 "use client";
 
-import { Input } from "./ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
+import { PencilIcon } from "lucide-react";
 import { Button } from "./ui/button";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-
-import type { z } from "zod";
-import { api } from "@/trpc/react";
-import { addTodoSchema } from "@/types/todo";
-import { toast } from "sonner";
 import {
   Dialog,
   DialogClose,
@@ -27,52 +11,87 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { PlusIcon } from "lucide-react";
+import { Input } from "./ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-const formSchema = addTodoSchema;
+import type { z } from "zod";
+import { updateTodoSchema } from "@/types/todo";
+import { Checkbox } from "./ui/checkbox";
+import { Textarea } from "./ui/textarea";
+import { api } from "@/trpc/react";
+import { toast } from "sonner";
 
-export function AddTodo() {
+const formSchema = updateTodoSchema;
+
+export function EditTodo({
+  id,
+  title,
+  description,
+  done,
+  priority,
+}: {
+  id: string;
+  title: string;
+  description: string | null;
+  done: boolean;
+  priority: "URGENT" | "TODAY" | "TOMORROW";
+}) {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      priority: "URGENT",
-      done: false,
+      id,
+      title,
+      description,
+      priority,
+      done,
     },
   });
-  const addTodoMutation = api.todo.addTodo.useMutation({
+
+  const editTodoMutation = api.todo.updateTodo.useMutation({
     onSuccess: () => {
-      toast("Todo added successfully!", {
-        duration: 1000,
+      toast("Successfully updated todo", {
+        duration: 2000,
       });
-      form.reset();
       router.refresh();
     },
     onError: (error) => {
-      toast.error(`Error adding the todo: ${error.message}`);
+      toast(`Failed to update todo ${error.message}`, {
+        duration: 2000,
+      });
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await addTodoMutation.mutateAsync(values);
+      console.log("Edit:", values);
+      //   await editTodoMutation.mutateAsync(values);
     } catch (error) {
       console.error(error);
     }
   }
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={"outline"} className="flex items-center gap-2">
-          <PlusIcon /> <span>Add Todo</span>
+        <Button variant={"outline"}>
+          <PencilIcon />
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add Todo</DialogTitle>
+          <DialogTitle>Edit Todo</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form className="space-y-3" onSubmit={form.handleSubmit(onSubmit)}>
@@ -94,7 +113,32 @@ export function AddTodo() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="Description" {...field} />
+                    <Textarea
+                      placeholder="Description"
+                      name={field.name}
+                      onBlur={field.onBlur}
+                      onChange={(e) => field.onChange(e.target.value)}
+                      value={field.value ?? ""}
+                      ref={field.ref}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="done"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <div className="flex items-center gap-2">
+                      <p>Mark Completed</p>
+                      <Checkbox
+                        checked={Boolean(field.value)}
+                        onCheckedChange={(val) => field.onChange(val)}
+                      />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -127,7 +171,7 @@ export function AddTodo() {
               )}
             />
             <DialogFooter>
-              <Button type="submit">
+              <Button type="submit" onClick={() => console.log("Hi")}>
                 {form.formState.isSubmitting ? "Saving..." : "Save"}
               </Button>
               <DialogClose asChild>

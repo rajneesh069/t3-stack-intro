@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
-import { addTodoSchema } from "@/types/todo";
+import { addTodoSchema, updateTodoSchema } from "@/types/todo";
 
 export const todoRouter = createTRPCRouter({
   getAllTodos: protectedProcedure.query(async ({ ctx }) => {
@@ -33,24 +33,15 @@ export const todoRouter = createTRPCRouter({
     }),
 
   updateTodo: protectedProcedure
-    .input(
-      z.object({
-        todoId: z.string().uuid(),
-        todo: z.object({
-          title: z.string(),
-          description: z.string(),
-          done: z.boolean(),
-        }),
-      }),
-    )
+    .input(updateTodoSchema)
     .mutation(async ({ input, ctx }) => {
       const userId = ctx.session.user.id;
       const result = await ctx.db.todo.updateManyAndReturn({
         where: {
-          id: input.todoId,
+          id: input.id,
           userId,
         },
-        data: input.todo,
+        data: input,
       });
 
       if (result.length === 0) {
@@ -61,6 +52,36 @@ export const todoRouter = createTRPCRouter({
       }
 
       return { data: result[0] };
+    }),
+
+  toggleComplete: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        done: z.boolean(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const userId = ctx.session.user.id;
+
+      const result = await ctx.db.todo.updateManyAndReturn({
+        where: {
+          id: input.id,
+          userId,
+        },
+        data: {
+          done: input.done,
+        },
+      });
+
+      if (result.length === 0) {
+        throw new TRPCError({
+          message: "No todo updated/found.",
+          code: "BAD_REQUEST",
+        });
+      }
+
+      return result[0];
     }),
 
   deleteTodo: protectedProcedure

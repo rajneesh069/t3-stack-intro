@@ -1,7 +1,8 @@
 import { auth } from "@/server/auth";
 import Link from "next/link";
-import { CheckCircle, PlusIcon } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import { Button } from "./ui/button";
+import { AddTodo } from "./add-todo";
 export async function Navbar() {
   const session = await auth();
 
@@ -16,14 +17,7 @@ export async function Navbar() {
         </Link>
 
         <div className="flex gap-2">
-          {session?.user && (
-            <Link href={"/add-todo"}>
-              <Button className="flex gap-1" variant={"outline"}>
-                <PlusIcon />
-                <p>Add Todo</p>
-              </Button>
-            </Link>
-          )}
+          {session?.user && <AddTodo />}
           <Link href={session ? "/api/auth/signout" : "/api/auth/signin"}>
             <Button variant={"outline"}>
               <p>{session ? "Sign out" : "Sign in"}</p>
