@@ -3,102 +3,11 @@ import { TodoCard } from "./todo-card";
 import { Input } from "./ui/input";
 import { api } from "@/trpc/server";
 
-// Mock data for each section — 4 todos each
-const urgentTodos = [
-  {
-    id: "uuid-today-1",
-    title: "Fix bug in login flow",
-    description: "Users can't reset password, investigate OAuth callback.",
-    done: false,
-    userId: "user-123",
-    createdAt: new Date("2025-08-01T10:00:00Z"),
-    updatedAt: new Date("2025-08-01T10:00:00Z"),
-  },
-  {
-    id: "uuid-today-2",
-    title: "Code review PR #456",
-    description: "Review new feature branch and leave feedback.",
-    done: false,
-    userId: "user-123",
-    createdAt: new Date("2025-08-01T11:30:00Z"),
-    updatedAt: new Date("2025-08-01T11:30:00Z"),
-  },
-  {
-    id: "uuid-today-3",
-    title: "Update dependencies",
-    description: "Update all npm packages to latest minor versions.",
-    done: true,
-    userId: "user-123",
-    createdAt: new Date("2025-08-01T08:15:00Z"),
-    updatedAt: new Date("2025-08-01T12:00:00Z"),
-  },
-];
-
-const laterTodayTodos = [
-  {
-    id: "uuid-later-1",
-    title: "Design new dashboard UI",
-    description: "Sketch wireframes and get feedback from the team.",
-    done: false,
-    userId: "user-123",
-    createdAt: new Date("2025-08-01T13:00:00Z"),
-    updatedAt: new Date("2025-08-01T13:00:00Z"),
-  },
-  {
-    id: "uuid-later-2",
-    title: "Write tests for user API",
-    description: "Cover edge cases and error handling.",
-    done: false,
-    userId: "user-123",
-    createdAt: new Date("2025-08-01T14:15:00Z"),
-    updatedAt: new Date("2025-08-01T14:15:00Z"),
-  },
-  {
-    id: "uuid-later-3",
-    title: "Plan team retrospective",
-    description: "Gather points and prepare agenda for Friday.",
-    done: false,
-    userId: "user-123",
-    createdAt: new Date("2025-08-01T15:30:00Z"),
-    updatedAt: new Date("2025-08-01T15:30:00Z"),
-  },
-];
-
-const tomorrowTodos = [
-  {
-    id: "uuid-tomorrow-1",
-    title: "Research new tech stack",
-    description: "Look into Rust backend frameworks.",
-    done: false,
-    userId: "user-123",
-    createdAt: new Date("2025-08-02T09:00:00Z"),
-    updatedAt: new Date("2025-08-02T09:00:00Z"),
-  },
-  {
-    id: "uuid-tomorrow-2",
-    title: "Prepare presentation slides",
-    description: "For next week’s all-hands meeting.",
-    done: false,
-    userId: "user-123",
-    createdAt: new Date("2025-08-02T10:30:00Z"),
-    updatedAt: new Date("2025-08-02T10:30:00Z"),
-  },
-  {
-    id: "uuid-tomorrow-3",
-    title: "Refactor auth middleware",
-    description: "Make it compatible with new token strategy.",
-    done: false,
-    userId: "user-123",
-    createdAt: new Date("2025-08-02T11:45:00Z"),
-    updatedAt: new Date("2025-08-02T11:45:00Z"),
-  },
-];
-
 export async function Todos() {
   const todos = await api.todo.getAllTodos();
   const urgentTodos = todos.filter((todo) => todo.priority === "URGENT");
   const laterTodayTodos = todos.filter((todo) => todo.priority === "TODAY");
-  const tomorrowTodos = todos.filter((todo) => todo.priority === "URGENT");
+  const tomorrowTodos = todos.filter((todo) => todo.priority === "TOMORROW");
   return (
     <div className="flex h-full w-full flex-col-reverse gap-2 p-2 lg:h-[calc(100vh-64px)] lg:flex-col">
       <div className="flex h-full w-full flex-grow flex-col border-b px-2 lg:flex-row">

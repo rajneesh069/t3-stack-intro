@@ -15,13 +15,12 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { z } from "zod";
+import type { z } from "zod";
+import { api } from "@/trpc/react";
+import { addTodoSchema } from "@/types/todo";
+import { toast } from "sonner";
 
-const formSchema = z.object({
-  title: z.string().min(2).max(50),
-  description: z.string().min(5).max(250).optional(),
-  priority: z.enum(["URGENT", "TODAY", "TOMORROW"]),
-});
+const formSchema = addTodoSchema;
 
 export function AddTodo() {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -30,13 +29,27 @@ export function AddTodo() {
       title: "",
       description: "",
       priority: "URGENT",
+      done: false,
+    },
+  });
+  const addTodoMutation = api.todo.addTodo.useMutation({
+    onSuccess: () => {
+      toast("Todo added successfully!", {
+        duration: 600,
+      });
+      form.reset();
+    },
+    onError: (error) => {
+      toast.error(`Error adding the todo: ${error.message}`);
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      await addTodoMutation.mutateAsync(values);
+    } catch (error) {
+      console.error(error);
+    }
   }
   return (
     <div className="flex h-full items-center justify-center">
@@ -94,8 +107,11 @@ export function AddTodo() {
                   </FormItem>
                 )}
               />
-
-              <Button type="submit">Submit</Button>
+              <div className="flex justify-end">
+                <Button type="submit">
+                  {form.formState.isSubmitting ? "Adding..." : "Add"}
+                </Button>
+              </div>
             </form>
           </Form>
         </CardContent>

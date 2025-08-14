@@ -1,6 +1,6 @@
-import type { CreateTodoSchema } from "@/types/todo";
+import type { AddTodoSchema } from "@/types/todo";
 
-export const heroSectionCards: CreateTodoSchema[] = [
+export const heroSectionCards: AddTodoSchema[] = [
   {
     title: "Design new landing page",
     done: true,

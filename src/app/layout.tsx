@@ -7,6 +7,7 @@ import { TRPCReactProvider } from "@/trpc/react";
 import { ThemeProvider } from "@/components/theme-provider";
 import { headers } from "next/headers";
 import { Navbar } from "@/components/navbar";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Task Flow",
@@ -38,6 +39,7 @@ export default async function RootLayout({
           enableColorScheme={true}
         >
           <TRPCReactProvider>
+            <Toaster position="top-right" />
             <Navbar />
             <main className="flex-1">{children}</main>
           </TRPCReactProvider>

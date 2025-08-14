@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
+import { addTodoSchema } from "@/types/todo";
 
 export const todoRouter = createTRPCRouter({
   getAllTodos: protectedProcedure.query(async ({ ctx }) => {
@@ -12,13 +13,7 @@ export const todoRouter = createTRPCRouter({
     return allTodos;
   }),
   addTodo: protectedProcedure
-    .input(
-      z.object({
-        title: z.string(),
-        description: z.string().optional(),
-        done: z.boolean(),
-      }),
-    )
+    .input(addTodoSchema)
     .mutation(async ({ input, ctx }) => {
       const userId = ctx.session.user.id;
       return await ctx.db.todo.create({
