@@ -1,4 +1,3 @@
-import { Button } from "./ui/button";
 import {
   Card,
   CardDescription,
@@ -6,12 +5,15 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import { DeleteTodo } from "./delete-todo";
 
 export function TodoCard({
+  id,
   title,
   description,
   done,
 }: {
+  id: string;
   title: string;
   description: string | null;
   done: boolean;
@@ -29,7 +31,7 @@ export function TodoCard({
         )}
       </CardHeader>
       <CardFooter className="flex justify-end">
-        <Button variant={"destructive"}>Delete</Button>
+        <DeleteTodo id={id} />
       </CardFooter>
     </Card>
   );

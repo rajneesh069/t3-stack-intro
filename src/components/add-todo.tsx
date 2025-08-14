@@ -35,7 +35,7 @@ export function AddTodo() {
   const addTodoMutation = api.todo.addTodo.useMutation({
     onSuccess: () => {
       toast("Todo added successfully!", {
-        duration: 600,
+        duration: 1000,
       });
       form.reset();
     },

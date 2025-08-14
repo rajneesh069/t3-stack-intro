@@ -19,6 +19,7 @@ export async function Todos() {
           {urgentTodos.map((todo) => (
             <TodoCard
               key={todo.id}
+              id={todo.id}
               title={todo.title}
               description={todo.description}
               done={todo.done}
@@ -36,6 +37,7 @@ export async function Todos() {
           {laterTodayTodos.map((todo) => (
             <TodoCard
               key={todo.id}
+              id={todo.id}
               title={todo.title}
               description={todo.description}
               done={todo.done}
@@ -51,6 +53,7 @@ export async function Todos() {
           {tomorrowTodos.map((todo) => (
             <TodoCard
               key={todo.id}
+              id={todo.id}
               title={todo.title}
               description={todo.description}
               done={todo.done}
