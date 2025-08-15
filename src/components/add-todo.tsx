@@ -20,7 +20,6 @@ import { addTodoSchema } from "@/types/todo";
 import { toast } from "sonner";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -29,10 +28,12 @@ import {
 } from "./ui/dialog";
 import { PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const formSchema = addTodoSchema;
 
 export function AddTodo() {
+  const [open, setOpen] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,6 +51,7 @@ export function AddTodo() {
       });
       form.reset();
       router.refresh();
+      setOpen(false);
     },
     onError: (error) => {
       toast.error(`Error adding the todo: ${error.message}`);
@@ -64,7 +66,7 @@ export function AddTodo() {
     }
   }
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant={"outline"} className="flex items-center gap-2">
           <PlusIcon /> <span>Add Todo</span>
@@ -130,9 +132,6 @@ export function AddTodo() {
               <Button type="submit">
                 {form.formState.isSubmitting ? "Saving..." : "Save"}
               </Button>
-              <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
-              </DialogClose>
             </DialogFooter>
           </form>
         </Form>

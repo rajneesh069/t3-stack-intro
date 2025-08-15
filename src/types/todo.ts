@@ -26,7 +26,6 @@ export const addTodoSchema = z.object({
 
 export const updateTodoSchema = z.object({
   id: z.string().uuid(),
-  userId: z.string().cuid(),
   title: z.string(),
   description: z.string().nullable(),
   done: z.boolean(),

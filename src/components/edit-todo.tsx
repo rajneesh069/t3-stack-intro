@@ -4,7 +4,6 @@ import { PencilIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -31,6 +30,7 @@ import { Checkbox } from "./ui/checkbox";
 import { Textarea } from "./ui/textarea";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
+import { useState } from "react";
 
 const formSchema = updateTodoSchema;
 
@@ -47,15 +47,16 @@ export function EditTodo({
   done: boolean;
   priority: "URGENT" | "TODAY" | "TOMORROW";
 }) {
+  const [open, setOpen] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      id,
-      title,
       description,
-      priority,
       done,
+      id,
+      priority,
+      title,
     },
   });
 
@@ -65,6 +66,7 @@ export function EditTodo({
         duration: 2000,
       });
       router.refresh();
+      setOpen(false);
     },
     onError: (error) => {
       toast(`Failed to update todo ${error.message}`, {
@@ -75,15 +77,14 @@ export function EditTodo({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      console.log("Edit:", values);
-      //   await editTodoMutation.mutateAsync(values);
+      await editTodoMutation.mutateAsync(values);
     } catch (error) {
       console.error(error);
     }
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant={"outline"}>
           <PencilIcon />
@@ -136,7 +137,7 @@ export function EditTodo({
                       <p>Mark Completed</p>
                       <Checkbox
                         checked={Boolean(field.value)}
-                        onCheckedChange={(val) => field.onChange(val)}
+                        onCheckedChange={(val) => field.onChange(Boolean(val))}
                       />
                     </div>
                   </FormControl>
@@ -171,12 +172,9 @@ export function EditTodo({
               )}
             />
             <DialogFooter>
-              <Button type="submit" onClick={() => console.log("Hi")}>
+              <Button type="submit" disabled={editTodoMutation.isPending}>
                 {form.formState.isSubmitting ? "Saving..." : "Save"}
               </Button>
-              <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
-              </DialogClose>
             </DialogFooter>
           </form>
         </Form>

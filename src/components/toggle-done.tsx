@@ -32,6 +32,7 @@ export function ToggleComplete({ id, done }: { done: boolean; id: string }) {
   }
   return (
     <Checkbox
+      className="h-6 w-6 rounded-full"
       onCheckedChange={handleSubmit}
       checked={Boolean(done)}
       disabled={toggleCompleteMutation.isPending}
